@@ -18,22 +18,23 @@ struct NetworkWeatherManager {
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: url) { data, response, error in
             if let data = data {
-                self.parseJSON(withjJSON: data)
+                let currentWeather = self.parseJSON(withjJSON: data)
             }
         }
         task.resume() //запуск
     }
     
-    func parseJSON(withjJSON data: Data) {
+    func parseJSON(withjJSON data: Data) -> CurrentWeather? {
         let decoder = JSONDecoder()
         
         do {
             let currentWeatherData = try decoder.decode(CurrentWeatherData.self, from: data)
-            print(currentWeatherData.main.temp)
+            guard let currentWeather = CurrentWeather(currentWeatherData: currentWeatherData) else { return nil }
+            return currentWeather
         } catch let error as NSError {
             print(error.localizedDescription )
         }
-        
+        return nil
     }
     
 }
