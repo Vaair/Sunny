@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  Sunny
 //
-//  Created by Ivan Akulov on 24/02/2020.
-//  Copyright © 2020 Ivan Akulov. All rights reserved.
+//  Created by Ivan Akulov on 27/09/2020.
+//  Copyright © 2020 Valerie Tarasenko. All rights reserved.
 //
 
 import UIKit
@@ -18,7 +18,9 @@ class ViewController: UIViewController {
     var networkWeatherManager = NetworkWeatherManager()
     
     @IBAction func searchPressed(_ sender: UIButton) {
-        self.presentSearchAlertController(withTitle: "Enter city name", message: nil, style: .alert)
+        self.presentSearchAlertController(withTitle: "Enter city name", message: nil, style: .alert) { cityName in
+            self.networkWeatherManager.fetchCurrentWeather(forCity: cityName)
+        }
     }
     
     override func viewDidLoad() {
