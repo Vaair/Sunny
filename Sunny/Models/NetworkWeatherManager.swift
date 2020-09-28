@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 class NetworkWeatherManager {
     
@@ -15,6 +16,17 @@ class NetworkWeatherManager {
     func fetchCurrentWeather(forCity city: String){
         let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(city)&appid=\(apiKey)&units=metric"
         
+        performRequest(withURLString: urlString)
+    }
+    
+    func fetchCurrentWeather(forLatitude latitude: CLLocationDegrees, longtitude: CLLocationDegrees){
+        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longtitude )&appid=\(apiKey)&units=metric"
+        
+        performRequest(withURLString: urlString)
+        
+    }
+    
+    fileprivate func performRequest(withURLString urlString: String){
         guard let url = URL(string: urlString) else { return }
         //работа с url ведется сессионно
         let session = URLSession(configuration: .default)
@@ -28,7 +40,7 @@ class NetworkWeatherManager {
         task.resume() //запуск
     }
     
-    func parseJSON(withjJSON data: Data) -> CurrentWeather? {
+    fileprivate func parseJSON(withjJSON data: Data) -> CurrentWeather? {
         let decoder = JSONDecoder()
         
         do {
